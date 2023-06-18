@@ -30,24 +30,6 @@ class _Register extends State<Register> {
   late String email;
   late String password;
 
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -209,83 +191,7 @@ class _Register extends State<Register> {
                     },
                   ),
 
-                  /*test button*/
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff986C40),
-                      minimumSize: const Size(100, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "test",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                    ),
-                    onPressed: () async {
-                      // TODO: implement registration logic
-                      UserCredential user = await signInWithGoogle();
-                    },
-                  ),
-
-                  /*Or join with text*/
-                  const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Center(
-                      child: Text(
-                        'OR JOIN WITH',
-                        style: TextStyle(
-                          letterSpacing: 1,
-                          color: Colors.brown,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  /*google and facebook button*/
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      /*google button */
-                      GestureDetector(
-                        onTap: () async{
-                          // Handle image press
-                          UserCredential user = await signInWithGoogle();
-                          
-                        },
-                        child: const Image(
-                          image: AssetImage('images/logo.png'),
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-
-                      /*facebook button */
-                      GestureDetector(
-                        onTap: () {
-                          // Handle image press
-                        },
-                        child: const Image(
-                          image: AssetImage('images/logo.png'),
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-
+                  const SizedBox(height: 30),
                   /*create store text */
                   Center(
                     child: GestureDetector(

@@ -1,6 +1,7 @@
 //import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'home.dart';
 import 'register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,6 +30,28 @@ class _Login extends State<Login> {
   final auth = FirebaseAuth.instance;
   late String email;
   late String password;
+
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +64,7 @@ class _Login extends State<Login> {
               /*Container Image*/
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.55,
+                height: MediaQuery.of(context).size.height * 0.50,
                 child: const Image(
                   image: AssetImage('images/login.jpg'),
                   fit: BoxFit.cover,
@@ -175,6 +198,59 @@ class _Login extends State<Login> {
                         ),
                       ),
                     ),
+                    
+                    /*Or join with text*/
+                  const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Center(
+                      child: Text(
+                        'OR JOIN WITH',
+                        style: TextStyle(
+                          letterSpacing: 1,
+                          color: Colors.brown,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  /*google and facebook button*/
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      /*google button */
+                      GestureDetector(
+                        onTap: () async{
+                          // Handle image press
+                          UserCredential user = await signInWithGoogle();
+                          
+                        },
+                        child: const Image(
+                          image: AssetImage('images/logo.png'),
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      ),
+
+                      /*facebook button */
+                      GestureDetector(
+                        onTap: () {
+                          // Handle image press
+                        },
+                        child: const Image(
+                          image: AssetImage('images/logo.png'),
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  )
+
                   ],
                 ),
               )

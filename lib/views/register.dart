@@ -30,7 +30,7 @@ class Register extends StatefulWidget {
 class _Register extends State<Register> {
   final auth = FirebaseAuth.instance;
   final RegisterViewModel _register = RegisterViewModel();
-
+  late String password;
   final Utilisateur _user = Utilisateur();
 
   @override
@@ -139,7 +139,7 @@ class _Register extends State<Register> {
                   /*Password input*/
                   TextFormField(
                     onChanged: (value) {
-                      _user.password = value;
+                      password = value;
                     },
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -182,13 +182,12 @@ class _Register extends State<Register> {
                         username: _user.username,
                         email: _user.email,
                         phone: _user.tel,
-                        password: _user.password,
                       );
                       // TODO: implement registration logic
                       try {
                         var user = await auth
                             .createUserWithEmailAndPassword(
-                                email: _user.email, password: _user.password)
+                                email: _user.email, password: password)
                             .then((value) => Navigator.push(
                                 context,
                                 MaterialPageRoute(

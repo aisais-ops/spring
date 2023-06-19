@@ -1,4 +1,4 @@
-import 'package:spring/classes/utilisateur.dart';
+import 'package:spring/models/utilisateur.dart';
 
 enum Role{Gerant,ServiceFacturation,SupportClient}
 
@@ -7,7 +7,7 @@ class Administrateur extends Utilisateur{
   Role _role ;
 
   /** constructeur*/
-  Administrateur(String nom,String prenom,String email,String tel,String username,String password,this._cin,this._role) : super(nom, prenom, email, tel, username, password);
+  Administrateur(String nom,String prenom,String email,String tel,String username,String password,this._cin,this._role) : super(nom:nom, prenom:prenom, email:email, tel:tel, username:username, password:password);
 
   /** getters & setters*/
   String get cin => _cin;

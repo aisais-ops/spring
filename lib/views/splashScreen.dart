@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:spring/routes/splashScreenRoutes.dart';
 import 'package:spring/views/login.dart';
 
 class SplashScreenLancher extends StatelessWidget {
@@ -7,8 +8,13 @@ class SplashScreenLancher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: SplashScreen(),
+      /*routes: {
+        'login': (context) => const LoginLancher(),
+      },*/
+      routes: SplashScreenRoutes.getRoutes(),
+      
     );
   }
 }
@@ -28,8 +34,12 @@ class _SplashScreen extends State<SplashScreen> {
   void initState() {
     super.initState();
     // navigate to the new page after 3 seconds
-    Timer(Duration(seconds: 3), () => Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (BuildContext context) => LoginLancher())));
+    /*Timer(Duration(seconds: 3), () => Navigator.pushReplacement(
+      context, MaterialPageRoute(builder: (BuildContext context) => LoginLancher())));*/
+    Timer(
+      Duration(seconds: 3),
+      () => Navigator.pushReplacementNamed(context, 'login'),
+    );
   }
 
 

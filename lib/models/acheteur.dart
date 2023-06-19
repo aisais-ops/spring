@@ -1,5 +1,5 @@
-import 'package:spring/classes/carteBancaire.dart';
-import 'package:spring/classes/utilisateur.dart';
+import 'package:spring/models/carteBancaire.dart';
+import 'package:spring/models/utilisateur.dart';
 
 class Acheteur extends Utilisateur{
   String _adresse ;
@@ -7,7 +7,7 @@ class Acheteur extends Utilisateur{
   CarteBancaire _card ;
 
   /** constructeur*/
-  Acheteur(String nom,String prenom,String email,String tel,String username,String password,this._adresse,this._ville,this._card) : super(nom, prenom, email, tel, username, password);
+  Acheteur(String nom,String prenom,String email,String tel,String username,String password,this._adresse,this._ville,this._card) : super(nom:nom, prenom:prenom, email:email, tel:tel, username:username, password:password);
 
   /** getters & setters*/
   String get adresse => _adresse;

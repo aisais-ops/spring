@@ -1,4 +1,4 @@
-import 'package:spring/classes/utilisateur.dart';
+import 'package:spring/models/utilisateur.dart';
 
 class Vendeur extends Utilisateur{
   String _matricule ;
@@ -8,7 +8,7 @@ class Vendeur extends Utilisateur{
   String _rib ;
 
   /** constructeur*/
-  Vendeur(String nom,String prenom,String email,String tel,String username,String password,this._matricule, this._nom_store, this._ville, this._adresse, this._rib) : super(nom, prenom, email, tel, username, password);
+  Vendeur(String nom,String prenom,String email,String tel,String username,String password,this._matricule, this._nom_store, this._ville, this._adresse, this._rib) : super(nom:nom, prenom:prenom, email:email, tel:tel, username:username, password:password);
 
   /** getters & setters*/
   String get matricule => _matricule;

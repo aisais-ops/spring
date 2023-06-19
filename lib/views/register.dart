@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:spring/models/utilisateur.dart';
+import 'package:spring/viewmodels/registerViewModel.dart';
 import 'package:spring/views/login.dart';
 import 'package:spring/views/widgets/topBar.dart';
 import 'createStore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterLancher extends StatelessWidget {
   const RegisterLancher({super.key});
@@ -27,8 +29,9 @@ class Register extends StatefulWidget {
 
 class _Register extends State<Register> {
   final auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
+  final RegisterViewModel _register = RegisterViewModel();
+
+  final Utilisateur _user = Utilisateur();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +75,9 @@ class _Register extends State<Register> {
 
                   /*Username input*/
                   TextFormField(
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _user.username = value;
+                    },
                     keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
                       //labelText: 'Username',
@@ -92,7 +97,7 @@ class _Register extends State<Register> {
                   /*Email input*/
                   TextFormField(
                     onChanged: (value) {
-                      email = value;
+                      _user.email = value;
                     },
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
@@ -113,6 +118,9 @@ class _Register extends State<Register> {
                   /*Phone input*/
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      _user.tel = value;
+                    },
                     decoration: const InputDecoration(
                       //labelText: 'Email',
                       //labelStyle: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),
@@ -131,7 +139,7 @@ class _Register extends State<Register> {
                   /*Password input*/
                   TextFormField(
                     onChanged: (value) {
-                      password = value;
+                      _user.password = value;
                     },
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -169,11 +177,18 @@ class _Register extends State<Register> {
                       ),
                     ),
                     onPressed: () async {
+                      print(_user.username);
+                      _register.signUp(
+                        username: _user.username,
+                        email: _user.email,
+                        phone: _user.tel,
+                        password: _user.password,
+                      );
                       // TODO: implement registration logic
                       try {
                         var user = await auth
                             .createUserWithEmailAndPassword(
-                                email: email, password: password)
+                                email: _user.email, password: _user.password)
                             .then((value) => Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -190,7 +205,6 @@ class _Register extends State<Register> {
                       }
                     },
                   ),
-
                   const SizedBox(height: 30),
                   /*create store text */
                   Center(

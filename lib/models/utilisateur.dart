@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:spring/models/vendeur.dart';
 
 class Utilisateur {
@@ -17,6 +18,7 @@ class Utilisateur {
     _username = username ?? "";
     _password = password ?? "";
   }
+
 
   /** getters & setters*/
   String get nom => _nom;

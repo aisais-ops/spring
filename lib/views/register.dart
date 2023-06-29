@@ -177,14 +177,9 @@ class _Register extends State<Register> {
                       ),
                     ),
                     onPressed: () async {
-                      print(_user.username);
-                      _register.signUp(
-                        username: _user.username,
-                        email: _user.email,
-                        phone: _user.tel,
-                      );
+                      
                       // TODO: implement registration logic
-                      try {
+                      try {     
                         var user = await auth
                             .createUserWithEmailAndPassword(
                                 email: _user.email, password: password)
@@ -193,6 +188,7 @@ class _Register extends State<Register> {
                                 MaterialPageRoute(
                                   builder: (context) => const LoginLancher(),
                                 )));
+                        _register.signUp(_user);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
                           print('The password provided is too weak.');

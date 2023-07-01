@@ -1,8 +1,10 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:spring/views/widgets/drawer.dart';
-import 'widgets/appBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/views/buyer/widgets/drawer.dart';
+import '../widgets/appBar.dart';
 
 class Categorie extends StatefulWidget {
   const Categorie({super.key});
@@ -18,20 +20,33 @@ class CategorieLancher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Categorie(),
+      routes: Routes.getRoutes(),
     );
   }
 }
 
 class _Categorie extends State<Categorie> {
-  
+   String? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserType();
+  }
+
+  Future<void> loadUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userType = prefs.getString('typeUser')==null?"Geust":prefs.getString('typeUser');
+    setState(() {});
+  }
   List<bool> isFavorite = List.generate(10, (index) => false);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: myAppBar(context, 'Categorie'),
-        drawer: myDrawer(context),
+        appBar: myAppBar(context, 'Categorie',true),
+        drawer: myDrawer(context,userType=="Geust"?false:true),
         body: //Padding(
             //padding: const EdgeInsets.all(10),
             //child: SingleChildScrollView(

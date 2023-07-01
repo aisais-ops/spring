@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spring/models/utilisateur.dart';
-import 'package:spring/viewmodels/registerViewModel.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/viewmodels/authViewModel.dart';
 import 'package:spring/views/login.dart';
 import 'package:spring/views/widgets/topBar.dart';
 import 'createStore.dart';
@@ -12,8 +13,9 @@ class RegisterLancher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       home: Register(),
+      routes: Routes.getRoutes(),
     );
   }
 }
@@ -29,9 +31,9 @@ class Register extends StatefulWidget {
 
 class _Register extends State<Register> {
   final auth = FirebaseAuth.instance;
-  final RegisterViewModel _register = RegisterViewModel();
-  late String password;
-  final Utilisateur _user = Utilisateur();
+  final AuthViewModel authViewModel = AuthViewModel();
+  //late String password;
+  final Utilisateur utilisateur = Utilisateur();
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,7 @@ class _Register extends State<Register> {
                   /*Username input*/
                   TextFormField(
                     onChanged: (value) {
-                      _user.username = value;
+                      utilisateur.username = value;
                     },
                     keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
@@ -97,7 +99,7 @@ class _Register extends State<Register> {
                   /*Email input*/
                   TextFormField(
                     onChanged: (value) {
-                      _user.email = value;
+                      utilisateur.email = value;
                     },
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
@@ -119,7 +121,7 @@ class _Register extends State<Register> {
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) {
-                      _user.tel = value;
+                      utilisateur.tel = value;
                     },
                     decoration: const InputDecoration(
                       //labelText: 'Email',
@@ -139,7 +141,7 @@ class _Register extends State<Register> {
                   /*Password input*/
                   TextFormField(
                     onChanged: (value) {
-                      password = value;
+                      utilisateur.password = value;
                     },
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -177,9 +179,18 @@ class _Register extends State<Register> {
                       ),
                     ),
                     onPressed: () async {
-                      
+                      utilisateur.role = "acheteur";
+                      authViewModel.signUp(utilisateur);
+                      /*Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginLancher(),
+                          ));*/
+
+                       Navigator.pushReplacementNamed(context,'loginLancher');
+
                       // TODO: implement registration logic
-                      try {     
+                      /*try {     
                         var user = await auth
                             .createUserWithEmailAndPassword(
                                 email: _user.email, password: password)
@@ -188,7 +199,7 @@ class _Register extends State<Register> {
                                 MaterialPageRoute(
                                   builder: (context) => const LoginLancher(),
                                 )));
-                        _register.signUp(_user);
+                        authViewModel.signUp(_user);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
                           print('The password provided is too weak.');
@@ -197,7 +208,7 @@ class _Register extends State<Register> {
                         }
                       } catch (e) {
                         print(e);
-                      }
+                      }*/
                     },
                   ),
                   const SizedBox(height: 30),
@@ -206,11 +217,12 @@ class _Register extends State<Register> {
                     child: GestureDetector(
                       onTap: () {
                         // Handle click event
-                        Navigator.push(
+                        /*Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const CreateStoreLancher()),
-                        );
+                        );*/
+                         Navigator.pushReplacementNamed(context,'createStoreLancher');
                       },
                       child: const Text(
                         'CREATE STORE',

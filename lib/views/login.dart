@@ -1,18 +1,25 @@
 //import 'dart:ffi';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'home.dart';
+import 'package:spring/models/utilisateur.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/viewmodels/authViewModel.dart';
+import 'package:spring/views/seller/dashboard.dart';
+import 'buyer/home.dart';
 import 'register.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:spring/models/vendeur.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginLancher extends StatelessWidget {
   const LoginLancher({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Login(),
+      routes: Routes.getRoutes(),
     );
   }
 }
@@ -27,12 +34,13 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State<Login> {
-  final auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
+  //final auth = FirebaseAuth.instance;
+  //late String email;
+  //late String password;
+  Utilisateur utilisateur = Utilisateur();
+  AuthViewModel authViewModel = AuthViewModel();
 
-
-  Future<UserCredential> signInWithGoogle() async {
+  /*Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -48,9 +56,7 @@ class _Login extends State<Login> {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
-
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +99,7 @@ class _Login extends State<Login> {
                     /*Email | Phone input*/
                     TextFormField(
                       onChanged: (value) {
-                        email = value;
+                        utilisateur.email = value;
                       },
                       keyboardType: TextInputType.emailAddress,
                       style: TextStyle(
@@ -115,7 +121,7 @@ class _Login extends State<Login> {
                     /*Password input*/
                     TextFormField(
                       onChanged: (value) {
-                        password = value;
+                        utilisateur.password = value;
                       },
                       obscureText: true,
                       style: TextStyle(
@@ -155,10 +161,41 @@ class _Login extends State<Login> {
                         ),
                       ),
                       onPressed: () async {
-                        try {
+                        String? data = await authViewModel.signIn(utilisateur);
+                  
+                        /*Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => data=="vendeur"?const DashboardLancher():const HomeLancher()),
+                        );*/
+                         Navigator.pushReplacementNamed(context,data=="vendeur"?'dashboardLancher':'homeLancher');
+
+                        /*if (user != null) {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          var v = "acheteur";
+                          if (user is Vendeur) {
+                            v = "vendeur";
+                          }
+                          await prefs.setString('typeUser', '$v');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeLancher()),
+                          );
+                        }*/
+                        /* try {
                           var user = await auth.signInWithEmailAndPassword(
                               email: email, password: password);
                           if (user != null) {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            var v = "acheteur";
+                            if (user is Vendeur) {
+                              v = "vendeur";
+                            }
+
+                            await prefs.setString('typeUser', '$v');
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -173,7 +210,7 @@ class _Login extends State<Login> {
                           }
                         } catch (e) {
                           print(e);
-                        }
+                        }*/
                       },
                     ),
                     const SizedBox(height: 10),
@@ -181,11 +218,12 @@ class _Login extends State<Login> {
                     /*Already Registered text*/
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        /*Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const RegisterLancher()),
-                        );
+                        );*/
+                         Navigator.pushReplacementNamed(context,'registerLancher');
                       },
                       child: const Center(
                         child: Text(
@@ -198,59 +236,58 @@ class _Login extends State<Login> {
                         ),
                       ),
                     ),
-                    
+
                     /*Or join with text*/
-                  const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Center(
-                      child: Text(
-                        'OR JOIN WITH',
-                        style: TextStyle(
-                          letterSpacing: 1,
-                          color: Colors.brown,
+                    const Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Center(
+                        child: Text(
+                          'OR JOIN WITH',
+                          style: TextStyle(
+                            letterSpacing: 1,
+                            color: Colors.brown,
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  /*google and facebook button*/
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      /*google button */
-                      GestureDetector(
-                        onTap: () async{
-                          // Handle image press
-                          UserCredential user = await signInWithGoogle();
-                          
-                        },
-                        child: const Image(
-                          image: AssetImage('images/logo.png'),
-                          width: 50,
-                          height: 50,
+                    /*google and facebook button*/
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        /*google button */
+                        GestureDetector(
+                          onTap: () async {
+                            // Handle image press
+                            UserCredential user =
+                                await authViewModel.signInWithGoogle();
+                          },
+                          child: const Image(
+                            image: AssetImage('images/logo.png'),
+                            width: 50,
+                            height: 50,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-
-                      /*facebook button */
-                      GestureDetector(
-                        onTap: () {
-                          // Handle image press
-                        },
-                        child: const Image(
-                          image: AssetImage('images/logo.png'),
-                          width: 50,
-                          height: 50,
+                        const SizedBox(
+                          width: 30,
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  )
 
+                        /*facebook button */
+                        GestureDetector(
+                          onTap: () {
+                            // Handle image press
+                          },
+                          child: const Image(
+                            image: AssetImage('images/logo.png'),
+                            width: 50,
+                            height: 50,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               )

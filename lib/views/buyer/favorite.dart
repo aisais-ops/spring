@@ -1,7 +1,9 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'package:spring/views/home.dart';
-import 'widgets/appBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/views/buyer/home.dart';
+import '../widgets/appBar.dart';
 import 'widgets/drawer.dart';
 
 class FavoriteLancher extends StatelessWidget {
@@ -9,8 +11,9 @@ class FavoriteLancher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Favorite(),
+      routes: Routes.getRoutes(),
     );
   }
 }
@@ -25,12 +28,26 @@ class Favorite extends StatefulWidget {
 }
 
 class _Favorite extends State<Favorite> {
+   String? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserType();
+  }
+
+  Future<void> loadUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userType = prefs.getString('typeUser')==null?"Geust":prefs.getString('typeUser');
+    setState(() {});
+  }
+  
   @override
   Widget build(BuildContext context) {
     String a = "Newest";
     return Scaffold(
-        appBar: myAppBar(context, 'FAVORITE'),
-        drawer: myDrawer(context),
+        appBar: myAppBar(context, 'FAVORITE',true),
+        drawer: myDrawer(context,userType=="Geust"?false:true),
         body: Padding(
           padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 30),
           child: SingleChildScrollView(
@@ -143,10 +160,11 @@ class _Favorite extends State<Favorite> {
                 ),
                 onPressed: () {
                   // TODO: implement registration logic
-                  Navigator.push(
+                  /*Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const HomeLancher()),
-                  );
+                  );*/
+                   Navigator.pushReplacementNamed(context,'homeLancher');
                 },
               ),
             ],

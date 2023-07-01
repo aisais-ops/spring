@@ -1,6 +1,8 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'package:spring/views/widgets/drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/views/buyer/widgets/drawer.dart';
 import 'widgets/appBar.dart';
 
 class ContactUs extends StatefulWidget {
@@ -17,18 +19,32 @@ class ContactUsLancher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: ContactUs(),
+      routes: Routes.getRoutes(),
     );
   }
 }
 
 class _ContactUs extends State<ContactUs> {
+   String? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserType();
+  }
+
+  Future<void> loadUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userType = prefs.getString('typeUser')==null?"Geust":prefs.getString('typeUser');
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context,'CONTACT'),
-      drawer: myDrawer(context),
+      appBar: myAppBar(context,'CONTACT',false),
+      drawer: myDrawer(context,userType=="Geust"?false:true),
       body: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30,top: 20,bottom: 30),
         child: SingleChildScrollView(

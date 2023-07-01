@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:spring/routes/splashScreenRoutes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spring/routes/routes.dart';
 import 'package:spring/views/login.dart';
 
 class SplashScreenLancher extends StatelessWidget {
@@ -13,8 +14,7 @@ class SplashScreenLancher extends StatelessWidget {
       /*routes: {
         'login': (context) => const LoginLancher(),
       },*/
-      routes: SplashScreenRoutes.getRoutes(),
-      
+      routes: Routes.getRoutes(),
     );
   }
 }
@@ -29,19 +29,31 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreen extends State<SplashScreen> {
-
+  String? userType;
   @override
   void initState() {
     super.initState();
+    loadUserType();
     // navigate to the new page after 3 seconds
     /*Timer(Duration(seconds: 3), () => Navigator.pushReplacement(
       context, MaterialPageRoute(builder: (BuildContext context) => LoginLancher())));*/
+
     Timer(
       Duration(seconds: 3),
-      () => Navigator.pushReplacementNamed(context, 'login'),
+      () => Navigator.pushReplacementNamed(
+          context, userType == "vendeur" ? 'dashboardLancher' : 'homeLancher'),
     );
+    
   }
 
+  Future<String?> loadUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userType = prefs.getString('typeUser') == null
+        ? "Geust"
+        : prefs.getString('typeUser');
+    setState(() {});
+    return userType;
+  }
 
   @override
   Widget build(BuildContext context) {

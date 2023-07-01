@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spring/views/contact.dart';
 import 'package:spring/views/createStore.dart';
-import 'package:spring/views/favorite.dart';
+import 'package:spring/views/buyer/favorite.dart';
 import 'package:spring/views/login.dart';
-import '../profil.dart';
+import '../../profil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Widget myDrawer(BuildContext context) {
+Widget myDrawer1(BuildContext context) {
   final auth = FirebaseAuth.instance;
   return Drawer(
     backgroundColor: const Color(0xFFfe4cdaa),
@@ -80,20 +81,38 @@ Widget myDrawer(BuildContext context) {
                     },
                   ),
 
-                  /* Wishlist button menu */
+                  /* ADD PRODUCT button menu */
                   ListTile(
                     leading: const Icon(Icons.favorite_outline_outlined),
                     title: const Text(
-                      "WISHLIST",
+                      "ADD PRODUCT",
                       style: TextStyle(color: Colors.brown),
                     ),
                     onTap: () {
-                      // Wishlist button action
+                      // ADD PRODUCT button action
 
-                      Navigator.push(
+                      /*Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const FavoriteLancher()),
-                      );
+                      );*/
+
+                    },
+                  ),
+                   /* INVENTORY button menu */
+                  ListTile(
+                    leading: const Icon(Icons.favorite_outline_outlined),
+                    title: const Text(
+                      "INVENTORY",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    onTap: () {
+                      // INVENTORY button action
+
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const FavoriteLancher()),
+                      );*/
+                      
                     },
                   ),
 
@@ -109,17 +128,6 @@ Widget myDrawer(BuildContext context) {
                     },
                   ),
 
-                  /* Inbox button menu */
-                  ListTile(
-                    leading: const Icon(Icons.email_outlined),
-                    title: const Text(
-                      "INBOX",
-                      style: TextStyle(color: Colors.brown),
-                    ),
-                    onTap: () {
-                      // Inbox button action
-                    },
-                  ),
 
                   /* Contact us button menu */
                   ListTile(
@@ -133,30 +141,6 @@ Widget myDrawer(BuildContext context) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const ContactUsLancher()),
-                      );
-                    },
-                  ),
-
-                  /*become a seller button */
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff986C40),
-                      minimumSize: const Size(100, 40),
-                      maximumSize: const Size(200, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      "BECOME A SELLER",
-                      style: TextStyle(fontSize: 15, letterSpacing: 1),
-                    ),
-                    onPressed: () {
-                      // TODO: implement registration logic
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateStoreLancher()),
                       );
                     },
                   ),
@@ -186,15 +170,18 @@ Widget myDrawer(BuildContext context) {
               Icons.logout_rounded,
               color: Colors.brown,
             ),
-            onPressed: () {
+            onPressed: () async{
               auth.signOut().then(
-                (value) => Navigator.push(
+                (value) => /*Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const LoginLancher(),
                   )
-                )
+                )*/
+                 Navigator.pushReplacementNamed(context,'loginLancher')
               );
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString('typeUser', 'Geust');
             },
           )),
         ),

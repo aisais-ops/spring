@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:spring/views/cart.dart';
-import 'package:spring/views/favorite.dart';
+import 'package:spring/views/buyer/cart.dart';
+import 'package:spring/views/buyer/favorite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
-PreferredSizeWidget? myAppBar(BuildContext context, String pageTitle) {
+PreferredSizeWidget? myAppBar(
+  BuildContext context,
+  String pageTitle,
+  bool show,
+) {
   return AppBar(
     backgroundColor: Colors.transparent,
     elevation: 0,
@@ -14,9 +18,9 @@ PreferredSizeWidget? myAppBar(BuildContext context, String pageTitle) {
       onPressed: () {
         // Handle menu button press
         Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const cartLancher()),
-          );
+          context,
+          MaterialPageRoute(builder: (context) => const cartLancher()),
+        );
       },
     ),
 
@@ -26,6 +30,7 @@ PreferredSizeWidget? myAppBar(BuildContext context, String pageTitle) {
         const TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
     centerTitle: true,
     actions: <Widget>[
+      if (show)
       /*heart icon button */
       IconButton(
         icon: const Icon(Icons.favorite_outline_outlined),
@@ -53,6 +58,5 @@ PreferredSizeWidget? myAppBar(BuildContext context, String pageTitle) {
     ],
 
     /*gradient of tool bar*/
-    
   );
 }

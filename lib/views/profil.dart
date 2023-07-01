@@ -1,6 +1,8 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'package:spring/views/widgets/drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/views/buyer/widgets/drawer.dart';
 import 'widgets/appBar.dart';
 
 class ProfilLancher extends StatelessWidget {
@@ -8,8 +10,9 @@ class ProfilLancher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       home: Profil(),
+      routes: Routes.getRoutes(),
     );
   }
 }
@@ -24,12 +27,25 @@ class Profil extends StatefulWidget {
 }
 
 class _Profil extends State<Profil> {
+   String? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserType();
+  }
+
+  Future<void> loadUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userType = prefs.getString('typeUser')==null?"Geust":prefs.getString('typeUser');
+    setState(() {});
+  }
   bool _isEditing = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context,'PROFIL'),
-      drawer: myDrawer(context),
+      appBar: myAppBar(context,'PROFIL',false),
+      drawer: myDrawer(context,userType=="Geust"?false:true),
       body: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30, top: 20,bottom: 30),
         child: SingleChildScrollView(

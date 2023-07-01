@@ -2,38 +2,60 @@ import 'dart:ui';
 
 import 'package:spring/models/Commande.dart';
 
-class Produit{
-  //attributes
+class Produit {
   late String _code;
   String get code => _code;
+  set code(String value) => _code = value;
+
   late String _label;
   String get label => _label;
-  set label(String value) {_label = value;}
-  DateTime _date_ajout=DateTime.now();
+  set label(String value) => _label = value;
+
+  late String _description;
+  String get description => _description;
+  set description(String value) => _description = value;
+
+  late DateTime _date_ajout;
   DateTime get date_ajout => _date_ajout;
-  set date_ajout(value){this._date_ajout=date_ajout;}
-  double _pu=0;
+  set date_ajout(DateTime value) => _date_ajout = value;
+
+  late double _pu;
   double get pu => _pu;
-  set pu(double value) {_pu = value;}
-  int _quantite_stock=1;
+  set pu(double value) => _pu = value;
+
+  late int _quantite_stock;
   int get quantite_stock => _quantite_stock;
-  set quantite_stock(int value) { _quantite_stock = value;}
-  List<Image>_images=[];
-  List<Image> get images => _images;
-  set images(List<Image> value) {_images = value;} //constructors
-  Produit(code,label,date_ajout,pu,qt_stock,images){
-    this._code=code??'';
-    this._label=label??'';
-    this._date_ajout=_date_ajout;
-    this._pu=pu;
-    this._quantite_stock=qt_stock;
-    this._images=images;
+  set quantite_stock(int value) => _quantite_stock = value;
+
+  late List<String> _images;
+  List<String> get images => _images;
+  set images(List<String> value) => _images = value;
+
+  Produit({
+    code,
+    label,
+    date_ajout,
+    pu,
+    quantite_stock,
+    images,
+    description
+  }) {
+    _code = code??"";
+    _label = label??"";
+    _date_ajout = date_ajout??new DateTime.now();
+    _pu = pu??0.0;
+    _quantite_stock = quantite_stock??0;
+    _images = images??[];
+    _description = description??"";
   }
-  //toString
+
   @override
-  String toString()=>'Produit n° $code: $label - $pu, ajouté le $date_ajout';
-  //equals
-  bool operator==(Object other)=>identical(this, other)||
+  String toString() =>
+      'Produit n° $code: $label - $pu, ajouté le $date_ajout images $images';
+
+  bool operator ==(Object other) =>
+      identical(this, other) ||
       other is Commande &&
-          runtimeType==other.runtimeType && code==other.code;
+          runtimeType == other.runtimeType &&
+          code == other.code;
 }

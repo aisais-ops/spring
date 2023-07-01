@@ -8,15 +8,17 @@ class Utilisateur {
   late String _tel;
   late String _username;
   late String _password;
+  late String _role;
 
   /** constructeur*/
-  Utilisateur({nom, prenom, email, tel, username, password}) {
+  Utilisateur({nom, prenom, email, tel, username, password, role}) {
     _nom = nom ?? "";
     _prenom = prenom ?? "";
     _email = email ?? "";
     _tel = tel ?? "";
     _username = username ?? "";
     _password = password ?? "";
+    _role = role ?? "";
   }
 
 
@@ -49,6 +51,11 @@ class Utilisateur {
   String get password => _password;
   set password(String value) {
     _password = value;
+  }
+
+  String get role => _role;
+  set role(String value) {
+    _role = value;
   }
 
   /** to string*/

@@ -1,8 +1,10 @@
 //import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:spring/views/widgets/drawer.dart';
-import 'widgets/appBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/views/buyer/widgets/drawer.dart';
+import '../widgets/appBar.dart';
 
 class cart extends StatefulWidget {
   const cart({super.key});
@@ -18,13 +20,27 @@ class cartLancher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: cart(),
+      routes: Routes.getRoutes(),
     );
   }
 }
 
 class _cart extends State<cart> {
+   String? userType;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserType();
+  }
+
+  Future<void> loadUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userType = prefs.getString('typeUser')==null?"Geust":prefs.getString('typeUser');
+    setState(() {});
+  }
   String dropdownValue = 'a';
   String filter = "Default";
   int selectedRadio = 0;
@@ -32,8 +48,8 @@ class _cart extends State<cart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context, 'CART'),
-      drawer: myDrawer(context),
+      appBar: myAppBar(context, 'CART',true),
+      drawer: myDrawer(context,userType=="Geust"?false:true),
       body: Padding(
         padding: const EdgeInsets.only(top: 20),
         //child: SingleChildScrollView(

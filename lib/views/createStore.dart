@@ -1,13 +1,18 @@
 
 import 'package:flutter/material.dart';
+import 'package:spring/models/utilisateur.dart';
+import 'package:spring/routes/routes.dart';
+import 'package:spring/viewmodels/authViewModel.dart';
+import 'package:spring/views/login.dart';
 
 class CreateStoreLancher extends StatelessWidget {
   const CreateStoreLancher({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       home: CreateStore(),
+      routes: Routes.getRoutes(),
     );
   }
 }
@@ -34,6 +39,9 @@ class _CreateStore extends State<CreateStore> {
   ];
     
   List<String>? selectedsells = [];
+  final AuthViewModel authViewModel = AuthViewModel();
+  //late String password;
+  final Utilisateur utilisateur = Utilisateur();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -117,6 +125,9 @@ class _CreateStore extends State<CreateStore> {
                         /*Business name input*/
                         TextFormField(
                           keyboardType: TextInputType.name,
+                          onChanged: (value) {
+                            utilisateur.username = value;
+                          },
                           decoration: const InputDecoration(
                             //labelText: 'Username',
                             //labelStyle: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),
@@ -135,6 +146,9 @@ class _CreateStore extends State<CreateStore> {
                         /*Business Email input*/
                         TextFormField(
                           keyboardType: TextInputType.emailAddress,
+                          onChanged: (value) {
+                            utilisateur.email = value;
+                          },
                           decoration: const InputDecoration(
                             //labelText: 'Email',
                             //labelStyle: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),
@@ -153,6 +167,9 @@ class _CreateStore extends State<CreateStore> {
                         /*Business Phone input*/
                         TextFormField(
                           keyboardType: TextInputType.phone,
+                          onChanged: (value) {
+                            utilisateur.tel = value;
+                          },
                           decoration: const InputDecoration(
                             //labelText: 'Email',
                             //labelStyle: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),
@@ -171,6 +188,9 @@ class _CreateStore extends State<CreateStore> {
                         /*Password input*/
                         TextFormField(
                           obscureText: true,
+                          onChanged: (value) {
+                            utilisateur.password = value;
+                          },
                           decoration: const InputDecoration(
                             //labelText: 'Email',
                             //labelStyle: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),
@@ -274,6 +294,14 @@ class _CreateStore extends State<CreateStore> {
                           ),
                           onPressed: () {
                             // TODO: implement registration logic
+                            utilisateur.role = "vendeur";
+                            authViewModel.signUp(utilisateur);
+                            /* Navigator.push(
+                                context,
+                               MaterialPageRoute(
+                                  builder: (context) => const LoginLancher(),
+                                ));*/
+                            Navigator.pushReplacementNamed(context,'loginLancher');
                           },
                         ),
           
